@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Admin Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -53,18 +53,22 @@
                 <img style="height:25px;width:25px;float:right;" class="img-profile rounded-circle" src="{{ asset('user.png')}}">
             </a>
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{{ '/admin/profil' }}">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('logout.perform') }}" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                </a>
-            </div>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="{{ '/admin/profil' }}">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Profile
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+              </a>
+              <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="d-none">
+                  @csrf
+              </form>
+          </div>
         </li>
     </ul>
     </div> 
@@ -77,8 +81,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <img src="{{asset('template')}}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="/" class="brand-link">
+      <img src="{{ asset('logo_deltizen.png') }}" alt="Deltizen Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Deltizen Corner</span>
     </a>
 
@@ -87,7 +91,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="info">
-          <a href="#" class="d-block">{{  Auth::user()->role }} : {{  Auth::user()->name }}</a>
+        <a href="#" style="text-decoration: none;" class="d-block">{{  Auth::user()->role }} : {{  Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -162,12 +166,12 @@
   <div class="modal-dialog" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Keluar dari Akun?</h5>
               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
+                  <span aria-hidden="true">x</span>
               </button>
           </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-body">Pilih "Logout" dibawah jika anda sudah yakin untuk mengakhiri sesi Anda saat ini.</div>
           <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
               <a class="btn btn-primary" href="{{ route('logout.perform') }}">Logout</a>

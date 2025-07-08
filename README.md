@@ -1,13 +1,22 @@
-# Website Pemesanan Menu Makanan dengan Framework Laravel
- Project Web dengan Framework Laravel.
- Merupakan website tentang pemesanan menu makanan secara online, di Deltizen Corner
- Website ini dibangun dengan menggunakan Framework Laravel, HTML/CSS, PHP, Javascript, Bootsrap.
- 
- Website ini memiliki tiga jenis user, yaitu customer, admin, dan owner. Dimana customer melakukan pemesanan,
- lalu akan diolah oleh admin, dan owner dapat melihat laporan seperti menu terlaris, customer dengan 
- pembelian terbanyak, dan laporan hasil penjualan pertanggal. 
- 
- Cara menjalankan :
- 1. Download lalu extract pada direktori kalian
- 2. import database 
- 3. jalankan program (php artisan serve)
+# PSI-2021ge-GG Project Name
+Please read [RULES.md](RULES.md).
+
+## General Discription
+
+## Features
+
+## Architectural Design
+
+## Database Design
+
+## Installation Guide
+
+### Minimum Hardware Requirements
+
+### Minimum Software Requirements
+
+# Contributors
++ 12S22010 - Reinaldy Hutapea (@GitHubUsername)
++ 12S22008 - Rahel Simanjuntak (@GitHubUsername)
++ 12S22017 - Lenna Febriana (@GitHubUsername)
++ 12S22051 - Sefanya Y Sinaga (@GitHubUsername)

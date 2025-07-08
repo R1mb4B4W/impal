@@ -1,210 +1,105 @@
-    .container-fluid{
-      position: relative;
-        padding: 20px;
-        font-family: 'Roboto',sans-serif;
+.container-fluid {
+    position: relative;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+}
 
+.main-content {
+    display: none;
+}
+
+/* invoice */
+.card {
+    margin: 50px auto; /* Tengah dan beri ruang vertikal */
+    padding: 35px;
+    max-width: 75rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+/* invoice-list */
+body.dark .card {
+    background-color: #18191A;
+    border: 1.5px solid rgb(255, 255, 255);
+    color: white;
+}
+
+body.dark .card .table {
+    color: white;
+}
+
+
+
+/* RESPONSIVE */
+@media screen and (max-width: 600px) {
+    body.dark .header h1 {
+        color: white;
     }
-    .main-content{
+
+    body.dark .card {
+        background-color: #18191A;
+        border: 1.5px solid rgb(255, 255, 255);
+        color: rgb(212, 211, 211);
+    }
+
+    span.logo.navLogo {
         display: none;
     }
 
-    /* invoice */
-    .card{
-        left: 50%;
-        transform: translateX(-50%);
-        position: absolute;
-        justify-content: center;
-        padding: 35px;
-        width: 75rem;
-        background-color: white;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
-    }
-    /* invoice-list */
-
-
-    body.dark .card{
-        background-color: #18191A;
-        border : 1.5px solid rgb(255, 255, 255);
-        color: white;
-       
-    }
-   
-    body.dark .card .table{
-
-        color: white;
-       
-    }
-  
-
-
-    /* CSS */
-    .button-61 {
-    align-items: center;
-    appearance: none;
-    border-radius: 4px;
-    border-style: none;
-    box-shadow: rgba(0, 0, 0, .2) 0 3px 1px -2px,rgba(0, 0, 0, .14) 0 2px 2px 0,rgba(0, 0, 0, .12) 0 1px 5px 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    font-family: Roboto,sans-serif;
-    font-size: .875rem;
-    font-weight: 500;
-    height: 36px;
-    justify-content: center;
-    letter-spacing: .0892857em;
-    line-height: normal;
-    min-width: 64px;
-    outline: none;
-    overflow: visible;
-    padding: 0 16px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    vertical-align: middle;
-    will-change: transform,opacity;
+    .searchBox {
+        display: none;
     }
 
-    .button-61:hover {
-    box-shadow: rgba(0, 0, 0, .2) 0 2px 4px -1px, rgba(0, 0, 0, .14) 0 4px 5px 0, rgba(0, 0, 0, .12) 0 1px 10px 0;
-    color: white;
+    .desktop {
+        display: none;
     }
 
-    .button-61:disabled {
-    background-color: rgba(0, 0, 0, .12);
-    box-shadow: rgba(0, 0, 0, .2) 0 0 0 0, rgba(0, 0, 0, .14) 0 0 0 0, rgba(0, 0, 0, .12) 0 0 0 0;
-    color: rgba(0, 0, 0, .37);
-    cursor: default;
-    pointer-events: none;
+    .main-content {
+        display: block;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
-    .button-61:not(:disabled) {
-    background-color: #8419fd;
+    .card {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        margin: 30px 0;
+    }
+
     
-    }
+}
 
-    .button-61:focus {
-    box-shadow: rgba(0, 0, 0, .2) 0 2px 4px -1px, rgba(0, 0, 0, .14) 0 4px 5px 0, rgba(0, 0, 0, .12) 0 1px 10px 0;
-    }
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-    .button-61:active {
-    box-shadow: rgba(0, 0, 0, .2) 0 5px 5px -3px, rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px;
-    background: #5e01c7;
-    color: white;
-    }
-    .button-62 {
-    align-items: center;
-    appearance: none;
-    border-radius: 4px;
-    border-style: none;
-    box-shadow: rgba(0, 0, 0, .2) 0 3px 1px -2px,rgba(0, 0, 0, .14) 0 2px 2px 0,rgba(0, 0, 0, .12) 0 1px 5px 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    display: inline-flex;
-    font-family: 'Roboto',sans-serif;
-    font-size: .875rem;
-    font-weight: 500;
-    height: 36px;
-    justify-content: center;
-    letter-spacing: .0892857em;
-    line-height: normal;
-    min-width: 64px;
-    outline: none;
-    overflow: visible;
-    padding: 0 16px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    vertical-align: middle;
-    will-change: transform,opacity;
-    }
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
-    .button-62:hover {
-    box-shadow: rgba(0, 0, 0, .2) 0 2px 4px -1px, rgba(0, 0, 0, .14) 0 4px 5px 0, rgba(0, 0, 0, .12) 0 1px 10px 0;
-    color: white;
-    }
+.main-content {
+    flex: 1;
+}
 
-    .button-62:disabled {
-    background-color: rgba(0, 0, 0, .12);
-    box-shadow: rgba(0, 0, 0, .2) 0 0 0 0, rgba(0, 0, 0, .14) 0 0 0 0, rgba(0, 0, 0, .12) 0 0 0 0;
-    color: rgba(0, 0, 0, .37);
-    cursor: default;
-    pointer-events: none;
-    }
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-    .button-62:not(:disabled) {
-    background-color: #1d52ff;
-    }
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
-    .button-62:focus {
-    box-shadow: rgba(0, 0, 0, .2) 0 2px 4px -1px, rgba(0, 0, 0, .14) 0 4px 5px 0, rgba(0, 0, 0, .12) 0 1px 10px 0;
-    }
+.footer {
+    margin-top: auto;
+}
 
-    .button-62:active {
-    box-shadow: rgba(0, 0, 0, .2) 0 5px 5px -3px, rgba(0, 0, 0, .14) 0 8px 10px 1px, rgba(0, 0, 0, .12) 0 3px 14px 2px;
-    background: #1601ce;
-    color: white;
-    }
-
-    .action > a {
-        text-decoration: none;
-        color: white;
-    }
-
-    @media screen and (max-width: 600px) {
- 
-
-        body.dark .header h1{
-            color: white;
-        }
-
-        body.dark .card{
-            background-color: #18191A;
-            border : 1.5px solid rgb(255, 255, 255);
-        }
-        body.dark .card{
-            color: rgb(212, 211, 211);
-        }
- 
-        span.logo.navLogo{
-            display: none;
-        }
-        .searchBox{
-            display: none;
-        }    
- 
-     
-        .desktop{
-            display: none;
-        }
-
-        .main-content{
-            display: block;
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .card{
-
-            width: 100%;
-            height: 25em;
-            padding: 0px;
-            margin-bottom: 20px;
-            margin-top: 30px;
-        }
-
-        footer{
-            display: none;
-        }
-    }

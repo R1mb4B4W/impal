@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Hash;
 class OwnerController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     public function profil()
     {
@@ -88,22 +88,90 @@ class OwnerController extends Controller
         );
     }
 
-    public function index()
+    public function penjualan(Request $request)
     {
-        $orders = Order_Product::join('orders', 'order_product.order_id', '=', 'orders.id')
+        $startDate = $request->input('from_date', Carbon::now()->startOfMonth()->toDateString());
+        $endDate = $request->input('to_date', Carbon::now()->endOfMonth()->toDateString());
+
+        // Data order detail
+        $orders = DB::table('order_product')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
             ->join('products', 'order_product.product_id', '=', 'products.id')
             ->select(
-                'order_product.id',
-                'products.name',
-                'products.price',
-                'order_product.quantity',
-                'order_product.subtotal',
+                'orders.id as order_id',
                 'orders.date',
                 'orders.status',
-                'orders.created_at'
+                'orders.created_at',
+                DB::raw('GROUP_CONCAT(products.name) as product_names'),
+                DB::raw('SUM(order_product.subtotal) as total_subtotal')
+            )
+            ->whereBetween('orders.date', [$startDate, $endDate])
+            ->groupBy('orders.id', 'orders.date', 'orders.status', 'orders.created_at')
+            ->get();
+
+        // Penjualan Harian (group by date)
+        $dailySales = DB::table('orders')
+            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+            ->whereBetween('orders.date', [$startDate, $endDate])
+            ->groupBy('orders.date')
+            ->orderBy('orders.date')
+            ->select('orders.date', DB::raw('SUM(order_product.subtotal) as total_sales'))
+            ->get();
+
+        // Penjualan Bulanan (group by month)
+        $monthlySales = DB::table('orders')
+            ->join('order_product', 'orders.id', '=', 'order_product.order_id')
+            ->whereBetween('orders.date', [$startDate, $endDate])
+            ->groupBy(DB::raw('DATE_FORMAT(orders.date, "%Y-%m")')) // 👈 perubahan di sini
+            ->orderBy(DB::raw('DATE_FORMAT(orders.date, "%Y-%m")'))
+            ->select(
+                DB::raw('DATE_FORMAT(orders.date, "%Y-%m") as month'),
+                DB::raw('SUM(order_product.subtotal) as total_sales')
             )
             ->get();
-        return view('owner.laporan_penjualan', compact('orders'));
+
+        // Penjualan per Kategori
+        $salesByCategory = DB::table('order_product')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->whereBetween('orders.date', [$startDate, $endDate])
+            ->groupBy('products.category_id')  // asumsikan produk punya kolom category
+            ->select('products.category_id', DB::raw('SUM(order_product.subtotal) as total_sales'))
+            ->get();
+
+        // Produk Terlaris
+        $topProducts = DB::table('order_product')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->join('products', 'order_product.product_id', '=', 'products.id')
+            ->whereBetween('orders.date', [$startDate, $endDate])
+            ->groupBy('products.id', 'products.name')
+            ->select(
+                'products.name',
+                DB::raw('SUM(order_product.quantity) as total_quantity'),
+                DB::raw('SUM(order_product.subtotal) as total_revenue')
+            )
+            ->orderByDesc('total_quantity')
+            ->limit(5)
+            ->get();
+
+        $statusDistribution = Order::byDateRange($startDate, $endDate)
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        $stats = [
+            'total_sales' => $orders->sum('total_subtotal'),
+            'order_count' => $orders->count(),
+            'avg_order_value' => $orders->avg('total_subtotal'),
+            'status_distribution' => $statusDistribution,
+            'daily_sales' => $dailySales,
+            'monthly_sales' => $monthlySales,
+            'sales_by_category' => $salesByCategory,
+            'top_products' => $topProducts,
+        ];
+
+        return view('owner.laporan_penjualan', compact('orders', 'startDate', 'endDate', 'stats'));
     }
 
     public function index2()
@@ -117,6 +185,24 @@ class OwnerController extends Controller
         $products = Product::orderBy('name', 'asc')->get();
         $categories = Category::orderBy('name', 'asc')->get();
         return view('owner.data_produk', compact('products', 'categories'));
+    }
+
+    public function pesananLaporanDetail($id)
+    {
+        // Ambil data pesanan berdasarkan ID
+        $order = Order::findOrFail($id);
+
+        // Ambil semua produk dalam pesanan
+        $details = Order_Product::where('order_id', $id)->get();
+        $identity = Order_Product::where('order_id', $id)->first();
+
+        // Hitung subtotal untuk setiap produk
+        foreach ($details as $detail) {
+            $detail->subtotal = $detail->quantity * $detail->price;
+        }
+
+        // Kirim data ke view admin
+        return view('owner.laporan_detail', compact('details', 'identity', 'id'));
     }
 
     public function index4()
@@ -208,7 +294,7 @@ class OwnerController extends Controller
             'sales_growth' => $salesGrowth,
         ];
 
-        return view('owner.laporan_penjualan', compact('stats', 'startDate', 'endDate'));
+        return view('owner.cetak_laporan_penjualan', compact('stats', 'startDate', 'endDate'));
     }
     public function pesananLaporan(Request $request)
     {
@@ -223,8 +309,7 @@ class OwnerController extends Controller
             }
             return Datatables::of($data)
                 ->addColumn('action', function ($data) {
-                    $detail = '<a href="' . route('order.detail', $data->id) .
-                        '" class="btn btn-xs btn-warning"><i class="fa-solid fa-circle-info"></i></a>';
+                    $detail = '<a href="' . route('pesanan.data.detail', $data->id) . '" class="btn btn-xs btn-warning"><i class="fa-solid fa-circle-info"></i></a>';
                     return $detail;
                 })
                 ->addIndexColumn()
@@ -294,6 +379,25 @@ class OwnerController extends Controller
         return Datatables::of($data)->make(true);
     }
 
+    public function storeAdmin(Request $r)
+    {
+        // validasi input
+        $r->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+        ]);
+        // simpan user dengan role admin
+        User::create([
+            'name'     => $r->name,
+            'email'    => $r->email,
+            'password' => Hash::make($r->password),
+            'role'     => 'admin',
+        ]);
+        // redirect kembali dengan notifikasi   
+        return back()->with('success', 'Admin baru berhasil dibuat');
+    }
+
     public function penjualan_cetak()
     {
         $category = Category::get();
@@ -302,6 +406,7 @@ class OwnerController extends Controller
 
     public function pesanan_cetak()
     {
+        // dd('tes');
         return view('owner.cetak_laporan_pesanan');
     }
 
@@ -395,7 +500,7 @@ class OwnerController extends Controller
         $orders = $orders->get();
         return view(
             'owner.new_laporan_tercetak_pemesanan',
-            compact('orders', 'sum', 'start_date', 'end_date')
+            compact('orders', 'start_date', 'end_date')
         );
     }
 }

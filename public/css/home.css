@@ -1,570 +1,394 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&display=swap');
-
-
-*{
-	list-style: none;
-	font-family: 'Montserrat', sans-serif;
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-body.dark{
-    --body-color: #18191A;
-    --nav-color: #242526;
-    --side-nav: #242526;
-    --text-color: #CCC;
-    --search-bar: #242526;
-}
-
-/* start darkmode */
-
-body.dark .Judul h1{
-    color: white;
-}
-
-
-body.dark .kategoris  a{
-    color: white;
-}
-body.dark .kategoris  a i{
-    color: white;
-}
-
-body.dark .vi_right > .name >a {
-    color: white;
-}
-body.dark .vi_right > .price  {
-    color: white;
-}
-
-
-
-body.dark .view_main{
- background-color: #18191A;
-}
-body.dark .view_item{
- background-color: #18191A;
-}
-
-
-/* end darkmode */
-
-
-.view_item img{
-	width: 100px;
-}
-
-
-.links{
-    padding: 20px;
-    margin-top: -50px;
-}
-
-
-.links ul li{
-    float: right;
-    margin: 0 2px;
-	font-size: 25px;
-	cursor: pointer;
-
-}
-
-.links ul li:hover, 
-.links ul li.active{
-	color: #4abd3e;
-    font-size: 28px;
-}
-
-.view_main{
-	background: #fff;
-	border-radius: 3px;
-	padding: 10px;
-
-}
-
-.list-view .view_item {
-	background: #fff;
-	border: 1px solid #e2efe1;
-	margin: 10px;
-	padding: 10px 20px;
-	display: flex;
-	align-items: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-
-.list-view .view_item:last-child{
-	margin-bottom: 0;
-}
-
-.list-view .view_item .vi_left{
-	margin-right: 25px;
-}
-
-.view_item .name a{
-	font-weight: 600;
-    text-decoration: none;
-    color: black;
-    font-size: 20px;
-}
-
-.view_item .price{
-	font-size: 18px;
-	font-weight: 200;
-}
-
-.view_item .btn{
-    margin-top: 5px;
-	width: 125px;
-	background: #4abd3e;
-	padding: 8px 5px;
-	border-radius: 5px;
-	color: #fff;
-	text-align: center;
-	font-weight: 200;
-	cursor: pointer;
-}
-
-
-.view_item .btn:hover{
-	background: #3bd62b;
-    color: white;
-}
-
-.grid-view{
-	width: 100%;
-}
-
-.grid-view .view_item {
-    
-	display: inline-block;
-    border: 1px solid #e2efe1;
-    width: 210px;
-    text-align: center;
-    margin: 10px;
-    padding: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    
-}
-
-.grid-view .view_item .vi_left {
-    margin-bottom: 10px;
-}
-
+/* Reset dasar */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif; /* Set font-family di sini untuk semua elemen */
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: space-between; /* Full kiri dan kanan */
-    align-items: center;
-    min-height: 1000vh;
-    margin: 0; /* Remove default margin */
+  background-color: #ffffff;
+  color: #111;
 }
 
-@media (max-width: 900px) {
-    .wawa-story {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .text-content {
-        max-width: 100%;
-    }
-
-    .buttons {
-        display: flex;
-        justify-content: center;
-    }
-
-    .btn {
-        margin: 10px;
-    }
-
-    .image-content {
-        flex-direction: column;
-    }
+header {
+  background: #5c8b59;
+  border-bottom: 1px solid #eee;
+  padding: 12px 24px;
 }
 
-.grid-view {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Item berada di tengah */
-    gap: 20px; /* Jarak antar item */
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.grid-view .view_item {
-    border: 1px solid #e2efe1;
-    width: 220px; /* Sesuaikan agar lebih proporsional */
-    text-align: center;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    background: white;
-    display: flex;
+.logo img {
+  width: 80px;
+  height: auto;
+  display: block;
+}
+
+.nav-menu ul {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+}
+
+.nav-menu ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.nav-menu ul li a:hover {
+  color: #796824;
+}
+
+/* Icon */
+.icons span {
+  margin-left: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.icons span:hover {
+  color: #000;
+}
+
+/* Hero Section */
+.hero {
+  display: flex;
+  min-height: 75vh;
+  background-color: #f4f4f4;
+}
+
+.hero-left,
+.hero-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-left {
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 60px;
+}
+
+.hero-left h2 {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-left button {
+  border: 1px solid #000;
+  background: transparent;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px;
+}
+
+.hero-left button:hover {
+  background: #796824;
+  color: #fff;
+}
+
+/* Hero Image */
+.hero-right img {
+    width: 120%; /* Increase the width to enlarge the image */
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0; /* Remove border radius for full image */
+    transform: translateX(-8.5%); /* Shift the image to the left */
+}
+
+/* Menu Section */
+.menu {
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.menu h3 {
+  font-size: 22px;
+  margin-bottom: 40px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* Menu list container */
+.menu-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Single menu item */
+.menu-item {
+  width: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.menu-text {
+  padding: 20px;
+  text-align: left;
+}
+
+.menu-text h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #111;
+}
+
+.menu-text p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.menu {
+  padding: 60px 40px;
+  text-align: left;
+  margin-bottom: 10px; /* Beri lebih banyak ruang agar tidak nempel dengan footer */
+}
+
+.view_wrap {
+  gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.view_item {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 240px;
+  padding: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.view_item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+}
+
+.vi_left img {
+  border-radius: 16px;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.vi_left img:hover {
+  transform: scale(1.05);
+}
+
+.vi_right .name a {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  text-decoration: none; /* Hilangkan garis bawah */
+  transition: color 0.3s ease;
+}
+
+.vi_right .name a:hover {
+  color: #22c55e;
+  text-decoration: none; /* Pastikan garis bawah tetap hilang saat hover */
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 500;
+  color: #10b981;
+  margin-top: 4px;
+}
+
+/* ✅ Gunakan opacity + visibility + fixed height untuk deskripsi */
+.product-description {
+  height: 40px; /* Tetapkan tinggi tetap agar layout tidak loncat */
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 10px;
+}
+
+.view_item:hover .product-description {
+  opacity: 1;
+  visibility: visible;
+}
+
+.vi_right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.vi_right form button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
+  margin-top: auto;
+  text-decoration: none; /* Hilangkan garis bawah */
+}
+
+.vi_right form button:hover {
+  background-color: #059669;
+  transform: scale(1.05);
+  text-decoration: none; /* Pastikan garis bawah tetap hilang saat hover */
+}
+
+.kategori-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.kategori-link {
+  padding: 10px 20px;
+  background-color: white;
+  border: 2px solid #22c55e;
+  color: #22c55e;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none; /* Hilangkan garis bawah */
+}
+
+.kategori-link:hover {
+  background-color: #22c55e;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-decoration: none; /* Pastikan garis bawah tetap hilang saat hover */
+}
+
+.kategori-link.active {
+  background-color: #22c55e;
+  color: white;
+  text-decoration: none; /* Hilangkan garis bawah */
+}
+
+
+
+/* Responsive */
+@media (max-width: 500px) {
+  .hero {
+    flex-direction: column;
+  }
+  
+  .hero-left,
+  .hero-right {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .menu-list {
     flex-direction: column;
     align-items: center;
+  }
 }
 
-.grid-view .view_item .vi_left {
-    margin-bottom: 10px;
+.footer {
+  background: linear-gradient(135deg, #BFE1BD);
+  color: #000000;
+  padding: 30px 20px 15px; /* Kurangi padding untuk mengecilkan ukuran footer */
 }
 
-.grid-view .view_item img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+.footer-content {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.1);
+  padding-bottom: 30px;
 }
 
-
-.kategoris > a{
-    font-size: 20px;
-    font-weight: 300;
-    text-decoration: none;
-    color: black;
-  
-}
-.kategoris > a:hover{
-    text-decoration: none;
-    color: black;
-    padding: 5px;
-    padding-left: 10px;   
-    padding-right: 10px;
-    font-size: 20px;
-    background-color: #CCC;
-    border-radius: 10px;
+.footer h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #000000; /* Kuning keemasan */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
-.kategoris > a > i{
-   color: black;
-   margin-right: 5px;
+.footer p {
+  margin: 10px 0;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #000000;
+  transition: color 0.3s ease;
 }
 
-.kategoris > a > i:hover{
-    color: rgb(0, 166, 61);
-  
+.footer p:hover {
+  color: #796824;
 }
 
-
-            .dropdown>a{
-                font-family: 'Montserrat', sans-serif;
-                text-decoration: none;
-                position: relative;
-            }
-            .dropdown>a>h5{
-                text-transform: uppercase;
-                color: black;
-                font-weight: 700;
-                position: absolute;
-            }
-            .dropdown>a>span{
-                position: absolute;
-                left: 115px;
-                top: -1px;
-            }
-            .dropdown>a:hover{   
-                text-decoration: none;
-            }
-
-            ul.dropdown-menu.show{
-                margin: 100px;
-            }
-
-
-
-            a .fa {
-                font-size: 22px;
-            }
-
-            .sec-center{
-                background-color: rgba(240, 230, 140, 0.866);
-                height: 270px;
-                width: 200px;
-                padding: 10px;
-                font-size: 22px;
-                position: relative;
-                left: 20px;
-
-            }
-
-            .kategori{
-                position: absolute;
-                width: 200px;
-
-            }
-
-            .kategori ul{
-                position: absolute;
-                left: -30px;
-                top: 5px;
-            }
-        
-            .kategori ul li a{
-        
-                text-decoration: none;
-                list-style-type: none;
-                color: rgb(0, 0, 0);
-
-            }
-
-
-            hr{
-                position: absolute;
-                width: 180px;
-                left: 30px;
-                top: -22px;
-            }
-
-            .category {
-                display: none;
-            }
-
-            .title{
-                display: none;
-            }
-            
-            .nav-menu{
-                display: none;
-            }
-    
-
-            .wrapper{
-                display: none;
-            }    
-
-            
-@media screen and (max-width: 600px) {
-
-    span.logo.navLogo{
-        display: none;
-    }
-
-/* start darkmode */
-body.dark .judul2{
-    background-color: #18191A;
-    width:100%;
-    margin-top: 100px;
-    padding-top: 100px;
+.icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
-body.dark .judul2 > h1{
-    color: white;
+.copyright {
+    text-align: center;
+    font-size: 14px;
+    color: #000000;
+    margin-top: 25px;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-             
-
-body.dark a.btn.makanan{
-    color: white;
-}
-body.dark a.btn.minuman{
-    color: white;
-}
-body.dark li.li-grid{
-    color: white;
-}
-body.dark li.li-list{
-    color: white;
-}
-
-/* start darkmode */
-
-                
-
-/* end darkmode */
-
-.container-fluid{
-    margin-top: 230px;
-                   
-}
-
-.judul2{
-    background-color: #ffffff;
-    width:100%;
-    margin-top: 70px;
-    padding-top: 30px;
-}
-                
-               
- /* start conten */
-
-.view_item img{
-	width: 100px;
-}
-
-
-
-.links ul li:hover, 
-.links ul li.active{
-	color: #4abd3e;
-    font-size: 28px;
-}
-
-div.view_main{
-	background: #fff;
-	border-radius: 3px;
-    width: 100%;
-}
-
-.list-view .view_item {
- 
-	background: #fff;
-	border: 1px solid #e2efe1;
-	margin: 10px;
-	padding: 10px 20px;
-	display: flex;
-	align-items: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-
-.list-view .view_item:last-child{
-	margin-bottom: 0;
-}
-
-.list-view .view_item .vi_left{
-	margin-right: 25px;
-}
-
-.view_item .name a{
-	font-weight: 600;
-    text-decoration: none;
-    color: black;
-    font-size: 20px;
-}
-
-.view_item .price{
-	font-size: 18px;
-	font-weight: 200;
-}
-
-.view_item .btn{
-    margin-top: 5px;
-	width: 125px;
-	background: #4abd3e;
-	padding: 8px 5px;
-	border-radius: 5px;
-	color: #fff;
-	text-align: center;
-	font-weight: 200;
-	cursor: pointer;
-}
-
-
-.view_item .btn:hover{
-	background: #3bd62b;
-    color: white;
-}
-
-
-                            
-            .list-view{
-                display: block;
-            }
-            
-            /* div.card.list{
-                height: 120px;
-                width: 412px;
-                position: relative;
-                margin: 20px 0px;
-            }
-            div.card.list img{
-            position: absolute;
-            left: 10;
-
-            }
-          
-            div.card.list span.price{
-            position: absolute;
-            font-size: 20px;
-            top: 50px;
-            left: 120px;
-
-            }
-            div.card.list button.btn{
-            position: absolute;
-            width: 50px;
-            left: 350px;
-            bottom: 8px;
-            border-radius: 8px;
-            font-size: 25px;
-            }
-            div.card.list button.btn:hover{
-           color: white;
-            } */
-
-            
-            
-
-            /* end card view */
-
-              
-                 .title{
-                    display: block;
-                    margin-top: 100px;
-                    margin-bottom: -80px;
-                    text-align: center;
-                    justify-content: center;
-                }
-
-                div.category {
-                    position: relative;
-                    margin-top: 60px;
-                    display: block;   
-                    background-color: rgb(255, 255, 255);
-                    width: 255px;
-                 
-                }
-                
-                div.category a {
-                    
-                    display: inline-block;
-                    color: rgb(0, 0, 0);
-                    text-align: center;
-                    padding: 10px;
-                    text-decoration: none;
-                    border-radius: 10px;
-              
-                }
-                
-                a.btn.makanan {
-                    position: absolute;
-                    right: 145px;
-                }
-                a.btn.minuman {
-                    position: absolute;
-                    right: 40px;
-                }
-                
-                .links > ul{
-                  
-                    float: right;
-                   
-                }
-
-             
-                div.category a:hover {
-                    background-color: rgb(235, 237, 235);
-                
-                }
-                
-                .category a.btn{
-                        border-color: rgb(7, 201, 7);
-                        border-width: 2px;
-                    
-                }
-       
-
-                .wrapper{
-                    display: block;
-                    
-                }    
-                .col-md-12.py-5{
-                    display: none;
-                }
-
-            }

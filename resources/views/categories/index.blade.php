@@ -31,7 +31,6 @@
                         <th width="10px">ID</th>
                         <th>Name</th>
                         <th width="150px"></th>
-                        <th width="150px"></th>
                     </tr>
                     </thead>
 
@@ -44,9 +43,6 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td> {{ $category->name }}</td>
-                            <td>
-                                <a href="{{ route('category.edit', ['id' => $category->id]) }}" class="btn bg-navy">Edit</a>
-                            </td>
                             <td>
                                 <form action="{{ route('category.destroy', ['id' => $category->id]) }}" method="get" onsubmit="return confirm('Delete this posts permanently ?')">
                                     @csrf

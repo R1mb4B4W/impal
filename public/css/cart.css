@@ -6,6 +6,20 @@ body.dark {
     --search-bar: #242526;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+    min-height: calc(100vh - 20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
 .container-fluid {
     position: relative;
     padding: 20px;
@@ -20,17 +34,15 @@ body.dark {
 }
 
 .card {
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-    justify-content: center;
-    padding: 20px;
-    width: 65rem;
+    position: relative; /* ubah absolute jadi relative */
+    margin: 80px auto; /* mengurangi margin untuk menaikkan posisi */
+    width: 80rem;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
-
+    padding: 20px;
 }
+
 
 .cartImg {
     height: 50px;
@@ -80,7 +92,7 @@ input:focus {
     position: absolute;
     right: 0px;
     width: 110px;
-    background-color: #4abd3e;
+    background-color:none;
     border-radius: 5px;
     color: rgb(255, 255, 255);
     text-align: center;
@@ -91,7 +103,7 @@ input:focus {
     position: absolute;
     right: 120px;
     width: 50px;
-    background-color: #646464;
+    background-color: none;
     border-radius: 5px;
     color: rgb(255, 255, 255);
     text-align: center;
@@ -101,7 +113,7 @@ input:focus {
 
 .btn1:hover,
 .btn2:hover {
-    background: #3bd62b;
+    background: none;
     color: white;
 }
 
@@ -246,5 +258,85 @@ input:focus {
     hr {
         color: black;
     }
+}
 
+.footer {
+    background: linear-gradient(135deg, #BFE1BD);
+    color: #000000;
+    padding: 30px 20px 15px;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.1);
+    padding-bottom: 30px;
+}
+
+.footer h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #000000;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.footer p {
+    margin: 10px 0;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #000000;
+    transition: color 0.3s ease;
+}
+
+.footer p:hover {
+    color: #796824;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.copyright {
+        text-align: center;
+        font-size: 14px;
+        color: #000000;
+        margin-top: 25px;
+        padding-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+/* Agar footer selalu di bawah jika konten sedikit */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.wrapper {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
 }

@@ -1,130 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Login Deltizen Corner</title>
-    <!--===============================================================================================-->	
-	<link rel="icon" type="{{ asset('/log/image/png')}}" href="images/icons/favicon.ico"/>
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/vendor/bootstrap/css/bootstrap.min.css')}}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/fonts/iconic/css/material-design-iconic-font.min.css')}}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/vendor/animate/animate.css')}}">
-    <!--===============================================================================================-->	
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/vendor/css-hamburgers/hamburgers.min.css')}}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/vendor/animsition/css/animsition.min.css')}}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/vendor/select2/select2.min.css')}}">
-    <!--===============================================================================================-->	
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/vendor/daterangepicker/daterangepicker.css')}}">
-    <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/css/util.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('/log/css/main.css')}}">
-    <!--===============================================================================================-->
+    <!-- Yummy CSS dan Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/css/main.css') }}" rel="stylesheet">
+    <!-- CSS Kustom untuk Login Elegan -->
     <style>
-        .form-control {
-            position: relative;
-            border: 0;
-      
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f1faee 0%, #e5e5e5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin: 20px;
+        }
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+        .login-title {
+            font-family: 'Amatic SC', cursive;
+            font-size: 48px;
+            color: #1d3557;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            font-size: 14px;
+            color: #1d3557;
+            margin-bottom: 5px;
+            display: block;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #e63946;
+            box-shadow: 0 0 5px rgba(230, 57, 70, 0.2);
+            outline: none;
+        }
+        .btn-show-pass {
+            position: absolute;
+            right: 15px;
+            top: 65%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+            font-size: 18px;
+        }
+        .btn-login {
+            background: #e63946;
+            color: white;
+            padding: 12px 0;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+            width: 100%;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .btn-login:hover {
+            background: #d00000;
+            transform: scale(1.02);
+        }
+        .text-link {
+            color: #e63946;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .text-link:hover {
+            color: #d00000;
+            text-decoration: underline;
+        }
+        .alert-danger {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #6c757d;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+            margin: 0 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="limiter">
-    <div class="container-login100">
-        <div class="wrap-login100">
-            <form class="login100-form validate-form" method="POST" action="{{ route('login') }}">
-                @csrf
-                <span class="login100-form-title p-b-26">
-                    Selamat Datang di Deltizen Corner !
-                </span>
-                <span class="login100-form-title p-b-48">
-                    <i class="zmdi zmdi-blogger"></i>
-                </span>
+    <div class="login-container" data-aos="fade-up">
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <h2 class="login-title">Selamat Datang di Deltizen Corner!</h2>
 
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-                    <input id="email" type="email" class="input100 @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                    <span class="focus-input100" data-placeholder="Email"></span>
-                   
-                </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+            </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Enter password">
-                    <span class="btn-show-pass">
-                        <i class="zmdi zmdi-eye"></i>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="position-relative">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                    <span class="btn-show-pass" onclick="togglePasswordVisibility()">
+                        <i class="bi bi-eye" id="togglePasswordIcon"></i>
                     </span>
-                    <input id="password" type="password" class="input100 @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-                    <span class="focus-input100" data-placeholder="Password"></span>
                 </div>
+            </div>
 
-                <div class="input100" style="text-align: center">
-                    @if (Route::has('password.request'))
-                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                        {{ __('Lupa Password ?') }}
-                    </a>
+            <script>
+                function togglePasswordVisibility() {
+                    const passwordInput = document.getElementById('password');
+                    const toggleIcon = document.getElementById('togglePasswordIcon');
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        toggleIcon.classList.remove('bi-eye');
+                        toggleIcon.classList.add('bi-eye-slash');
+                    } else {
+                        passwordInput.type = 'password';
+                        toggleIcon.classList.remove('bi-eye-slash');
+                        toggleIcon.classList.add('bi-eye');
+                    }
+                }
+            </script>
+
+            @error('email')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            @error('password')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+
+            <div class="text-center mb-4">
+                @if (Route::has('password.request'))
+                    <a class="text-link" href="{{ route('password.request') }}">Lupa Password?</a>
                 @endif
+            </div>
 
-                </div>
-                @error('email')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-                @error('password')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <button type="submit" class="btn-login">Login</button>
 
-                <div class="container-login100-form-btn">
-                    <div class="wrap-login100-form-btn">
-                        <div class="login100-form-bgbtn"></div>
-                        <button type="submit" class="login100-form-btn">
-                            Login
-                        </button>
-                    </div>
-                </div>
+            <div class="divider">atau</div>
 
-                <div class="text-center p-t-75">
-                    <span class="txt1">
-                        Belum Punya Akun ?
-                    </span>
-
-                    <a class="txt2" href="{{ route('register') }}">
-                        Daftar disini 
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="text-center">
+                <span class="text-muted">Belum Punya Akun?</span>
+                <a class="text-link d-block mt-2" href="{{ route('register') }}">Daftar disini</a>
+            </div>
+        </form>
     </div>
-</div>
 
-
-<div id="dropDownSelect1"></div>
-
-
-
-	
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/vendor/jquery/jquery-3.2.1.min.js')}}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/vendor/animsition/js/animsition.min.js')}}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/vendor/bootstrap/js/popper.js')}}"></script>
-	<script src="{{ asset('/log/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/vendor/select2/select2.min.js')}}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/vendor/daterangepicker/moment.min.js')}}"></script>
-	<script src="{{ asset('/log/vendor/daterangepicker/daterangepicker.js')}}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/vendor/countdowntime/countdowntime.js')}}"></script>
-<!--===============================================================================================-->
-	<script src="{{ asset('/log/js/main.js')}}"></script>
-
-{{-- @endsection --}}
-<body>
-    
+    <!-- Vendor JS Files -->
+    <script src="{{ asset('template_front/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('template_front/assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('template_front/assets/js/main.js') }}"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
 </html>

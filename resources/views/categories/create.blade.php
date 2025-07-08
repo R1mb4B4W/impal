@@ -19,10 +19,14 @@
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{ old('name') }}" autofocus required>
+                    <label>Kategori</label>
+                    <select class="form-control" id="name" name="name" required autofocus>
+                        <option value="" disabled selected>Pilih kategori</option>
+                        <option value="Makanan" {{ old('name') == 'Makanan' ? 'selected' : '' }}>Makanan</option>
+                        <option value="Minuman" {{ old('name') == 'Minuman' ? 'selected' : '' }}>Minuman</option>
+                        <option value="Promo" {{ old('name') == 'Promo' ? 'selected' : '' }}>Promo</option>
+                    </select>
                 </div>
-
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary" style="background-color: blue">Submit</button>

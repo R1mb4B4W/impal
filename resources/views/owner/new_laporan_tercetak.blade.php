@@ -71,7 +71,6 @@
         <td >Rp. {{ number_format($sum3,0) }}</td>
         <td >Rp. {{ number_format($sum,0) }}</td>
         <td ></td>
-
     </tr>
   </table>
 </div>

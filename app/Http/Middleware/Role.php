@@ -4,20 +4,39 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class Role
 {
-    public function handle($request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, $roles): Response
     {
         if (!Auth::check()) {
-            return redirect('/login'); // Pastikan user sudah login
+            return redirect('login');
         }
 
-        // Cek apakah user memiliki role yang sesuai
-        if (!in_array(Auth::user()->role, $roles)) {
-            return abort(403, 'Akses Ditolak'); // Gunakan 403 untuk Forbidden
+        $userRole = Auth::user()->role;
+
+        if ($userRole == $roles) {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect('/')->with('error', "Anda Tidak Punya Akses Untuk Login");
     }
 }
+
+
+// public function handle(Request $request, Closure $next, $roles): Response
+// {
+//     if (!Auth::check()) {
+//         return redirect('login');
+//     }
+//     //$user = Auth::user();
+
+//     $userRole = Auth::user()->roles->role_name;
+
+//     if ($userRole == $roles)
+//         return $next($request);
+
+//     return redirect('/')->with('error', "Anda Tidak Punya Akses Untuk Login");
+// }

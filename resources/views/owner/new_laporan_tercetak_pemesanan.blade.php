@@ -47,7 +47,7 @@
 <tr>
         <th>ID</th>
         <th>Nama Pemesan</th>
-        <th>Nomor_meja/Alamat</th>
+        <th>Nomor Telepon</th>
         <th>Jumlah Item</th>
         <th>Total Bayar</th>
         <th>Tanggal</th>
@@ -66,11 +66,7 @@
         </tbody>
     @endforeach
     <tr>
-        <td colspan="4" style="text-align: center;">Total</td>
-        {{-- <td >Rp. {{ number_format($sum2,0) }}</td>
-        <td >Rp. {{ number_format($sum3,0) }}</td> --}}
-        <td >Rp. {{ number_format($sum,0) }}</td>
-        <td ></td>
+
 
     </tr>
   </table>

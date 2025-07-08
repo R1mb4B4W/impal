@@ -1,131 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>E-Menu Deltizen Corner </title>
-  <!-- Bootstrap core CSS -->
-    <link href="{{ asset('/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('/bootstrap/js/bootstrap.min.js') }}" rel="stylesheet">
-    <link href="{{ asset('/css/frontend.css') }}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    {{-- Font --}}
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500;600&family=Ubuntu&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    {{-- font-awesome --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
-        <!-- ===== CSS ===== -->
-        <link rel="stylesheet" href="{{ asset('Navbar/style.css')}}">
-        
-        <!-- ===== Boxicons CSS ===== -->
-        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-        <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
-
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Deltizen Corner</title>
+    <!-- Yummy CSS dan Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('template_front/assets/css/main.css') }}" rel="stylesheet">
 </head>
-<header>
-  <nav >
-    <div class="nav-bar" >
-        <i class='bx bx-menu sidebarOpen' ></i>
-        <span class="logo navLogo"><a href="/">
-          <img src="{{ asset('logo_deltizen.png') }}" alt="Deltizen Corner" style="height: 70px;">
-        </a>
-      </span>
-</a></span>
-
-        <div class="menu" style="justify-content: center;justify-content: center;">
-            <div class="logo-toggle">
-                <span class="logo"><a href="/">Deltizen Corner</a></span>
-                <i class='bx bx-x siderbarClose'></i>
-            </div>
-
-            <ul class="nav-links" >
-              <li><a href="/">Home</a></li>
-              <li><a href="/menu">Menu</a></li>
-              <li><a href="/pembayaran">Pembayaran</a></li>              
-              <li ><a href="{{ route('invoice.list')}}">Status Pesanan</a></li>
-              <li class="cart"><a href="{{ route('cart.list')}}">Keranjang</a></li>
-              <li class="logout"><a href="{{ route('logout.perform') }}">Logout</a></li>
-            </ul>
-        </div>
-
-        <div class="darkLight-searchBox">
-          <div class="order">
-            <a href="{{ route('invoice.list')}}">
-          </a>
-          </div>
-
-            <div class="dark-light"></div>
-
-            <div class="searchBox">
-               <div class="searchToggle">
-                  <i class='bx bx-x cancel'></i>
-                  <i class='bx bx-search search'></i>
-               </div>
-                <form action="/home/cari" method="GET" class="search-field">
-                  <input type="text"  name="cari" placeholder="Search..." value="{{ old('cari') }}">
-                   <button type="submit" style="all:unset;margin-bottom: 28px;"><i class='bx bx-search' style="font-size: 30px;"></i></button>
-                </form>
-            </div>
-
-
-            <div class="cart">
-              <a href="{{ route('cart.list')}}">
-              <i class='bx bx-cart' style='color:#fffdfd'  ></i>
+<body class="index-page">
+    <!-- Header dari Yummy -->
+    <header id="header" class="header d-flex align-items-center sticky-top">
+        <div class="container position-relative d-flex align-items-center justify-content-between">
+            <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
+                <img src="{{ asset('logo_deltizen.png') }}" alt="Deltizen Corner" style="max-height: 40px;">
+                <h1 class="sitename">Deltizen Corner</h1>
+                <span>.</span>
             </a>
-            </div>
-
-            <div class="user">
-              {{-- <i class='bx bx-user' style='color:#fffdfd'></i> --}}
-              <a href="{{ route('logout.perform') }}">
-              <i class='bx bx-log-in-circle' style='color:#fcfbfb'  ></i>
-              </a>
-            </div>
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="/" class="{{ Request::is('/') ? 'active' : '' }}">Home</a></li>
+                    <li><a href="/menu" class="{{ Request::is('menu*') ? 'active' : '' }}">Menu</a></li>
+                    <li><a href="{{ route('invoice.list') }}" class="{{ Request::is('invoice*') ? 'active' : '' }}">Status Pesanan</a></li>
+                    <li><a href="{{ route('cart.list') }}" class="{{ Request::is('cart*') ? 'active' : '' }}">Keranjang</a></li>
+                        @auth
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">{{ Auth::user()->name }}</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                    <a href="{{ route('logout.perform') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Keluar
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </li>
+                                @endauth
+                                @guest
+                                    <li><a href="{{ route('login') }}">Masuk</a></li>
+                                @endguest
+                            </ul>
+                            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                        </nav>
+            <a class="btn-getstarted" href="/menu">Buat Pesanan</a>
         </div>
-    </div>
-</nav>
+    </header>
 
-<script src="{{ asset('Navbar/script.js')}}"></script>
-
-</header>
-
-<body>
-  
-    <main>
-  
-       @yield('content')
-      
+    <main class="main">
+        @yield('content')
     </main>
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="logo">
-          <img src="{{ asset('logo_deltizen.png') }}" class="logo-img">
+
+    <!-- Footer dari Yummy -->
+    <footer id="footer" class="footer dark-background">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col-lg-3 col-md-6 d-flex">
+                    <i class="bi bi-geo-alt icon"></i>
+                    <div class="address">
+                        <h4>Alamat</h4>
+                        <p>Sitoluama, Kec. Balige, Toba, Sumatera Utara 22381</p>
+                        <p>Indonesia</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex">
+                    <i class="bi bi-telephone icon"></i>
+                    <div>
+                        <h4>Kontak</h4>
+                        <p>
+                            <strong>Phone:</strong> <span>+6281360912900</span><br>
+                            <strong>Email:</strong> <span>delitzencorner@gmail.com</span><br>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex">
+                    <i class="bi bi-clock icon"></i>
+                    <div>
+                        <h4>Jam Buka</h4>
+                        <p>
+                            <strong>Sen-Jum:</strong> <span>10:00 - 22:00</span><br>
+                            <strong>Sab-Ming:</strong> <span>10:00 - 23:00</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4>Ikuti Kami</h4>
+                    <div class="social-links d-flex">
+                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="contact-us">
-          <h3>Contact Us</h3>
-          <p>
-            <img src="{{ asset('email.png') }}" alt="Email" class="icon"> delitzencorner@gmail.com
-          </p>
-          <p>
-            <img src="{{ asset('phone.png') }}" alt="Phone" class="icon"> +6281360912900
-          </p>
+        <div class="container copyright text-center mt-4">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">Deltizen Corner</strong> <span>All Rights Reserved</span></p>
         </div>
-        <div class="social-media">
-          <h3>Sosial Media</h3>
-          <p>
-            <img src="{{ asset('instagram.png') }}" alt="Instagram" class="icon"> deltizencorner
-          </p>
-          <p>
-            <img src="{{ asset('facebook.png') }}" alt="Facebook" class="icon"> deltizencorner
-          </p>
-        </div>
-      </div>
-      <p class="copyright">Copyright &copy; DeltizenCorner, Inc.</p>
     </footer>
 
-</body>
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+    <!-- Preloader -->
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="{{ asset('template_front/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('template_front/assets/vendor/aos/aos.js') }}"></script>
+    <script src="{{ asset('template_front/assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('template_front/assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ asset('template_front/assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+    <!-- Main JS File -->
+    <script src="{{ asset('template_front/assets/js/main.js') }}"></script>
+</body>
 </html>

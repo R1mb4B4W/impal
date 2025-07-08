@@ -81,7 +81,7 @@ a#action.btn.btn-xs.btn-warning{
             <div class="box" style="margin-bottom: 10px;">
                 <div class="my-2">
                     <button class="btn btn-danger">
-               <a href="/owner/laporan/pesanan/cetak" style="color: white;text-decoration: none;">Cetak</a>
+               <a href="{{ route('pesanan.cetak') }}" style="color: white;text-decoration: none;">Cetak</a>
              </button>
                </div>
              </div>
@@ -102,7 +102,7 @@ a#action.btn.btn-xs.btn-warning{
                     <thead>
                     <tr>
                         <th>No</th>
-                        <th>Id</th>
+                        <th>ID</th>
                         <th>Nama Penerima</th>
                         <th>No telepon yang dapat dihubungi</th>
                         <th>Total Bayar</th>
@@ -132,7 +132,7 @@ a#action.btn.btn-xs.btn-warning{
                 data:{from_date:from_date, to_date:to_date}
             },
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: true, searchable: false },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'id', name: 'id' },
                 { data: 'receiver', name: 'receiver' },
                 { data: 'address', name: 'address' },
@@ -158,29 +158,6 @@ a#action.btn.btn-xs.btn-warning{
 
             });
 
-
-        // $(function() {
-        //         $('#product-table').DataTable({
-        //             processing: true,
-        //             serverSide: true,
-        //             ajax: '{!! url("/order/data") !!}',
-        //             columns: [
-        //                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-        //                 { data: 'id', name: 'id' },
-        //                 { data: 'receiver', name: 'receiver' },
-        //                 { data: 'address', name: 'address' },
-        //                 { data: 'total_price', name: 'total_price' },
-        //                 { data: 'date', name: 'date'},
-        //                 { data: 'status', name: 'status'},
-        //                 { data: 'action', name: 'action', orderable: false, searchable: false}
-        //             ]
-          
-                    
-        //         });
-        //     });
-
-    
-// batas
 
    
 $('#filter').click(function(){

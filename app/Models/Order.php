@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +9,14 @@ class Order extends Model
     use HasFactory;
     protected $guarded = [];
     protected $table = 'orders';
+    protected $fillable = ['receiver', 'address', 'total_price', 'date', 'status', 'detail_status', 'catatan', 'user_id'];
+
+    public static $deliveryStatuses = [
+        'menunggu konfirmasi pembayaran',
+        'pesanan sedang disiapkan',
+        'pesanan selesai, menunggu konfirmasi penjemputan',
+        'selesai'
+    ];
 
     public function user()
     {
@@ -27,13 +34,11 @@ class Order extends Model
                     ->withPivot('quantity', 'subtotal');
     }
 
-    // Scope untuk filter rentang tanggal
     public function scopeByDateRange($query, $startDate, $endDate)
     {
         return $query->whereBetween('date', [$startDate, $endDate]);
     }
 
-    // Scope untuk status tertentu
     public function scopeByStatus($query, $status)
     {
         return $query->where('status', $status);

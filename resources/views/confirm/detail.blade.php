@@ -1,4 +1,3 @@
-
 @extends('layouts.admin-template')
 @section('content')
 {{-- <link href="{{ asset('/css/detail.css') }}" rel="stylesheet"> --}}
@@ -29,7 +28,7 @@
                 </tr>
 
                 <tr style="font-size: larger">
-                    <td>Alamat</td>
+                    <td>Nomor Telepon</td>
                     <td>{{ $identity->order->address }}</td>
                 </tr>
                 <tr style="font-size: larger">
@@ -66,6 +65,7 @@
                             <td style="font-size: medium">
                                 Rp. {{ number_format($detail->quantity * $detail->product->price,0) }}
                             </td>
+                            <td>Rp. {{ number_format($detail->subtotal, 0) }}</td>
                         </tr>
                     @endforeach
 

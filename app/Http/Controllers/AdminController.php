@@ -12,9 +12,9 @@ use App\Models\Confirm;
 
 class AdminController extends Controller
 {
-    public function __construct() {
-        $this->middleware('auth')->except(['showLoginForm', 'login']);
-    }
+    // public function __construct() {
+    //     $this->middleware('auth')->except(['showLoginForm', 'login']);
+    // }
 
     // Menampilkan form login admin
     public function showLoginForm()

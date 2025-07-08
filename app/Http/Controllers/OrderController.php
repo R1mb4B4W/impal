@@ -4,190 +4,108 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Order_Product;
-use Yajra\Datatables\Datatables;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth')->except(['index', 'detail', 'produkData']);
-    // }
-
     public function index()
     {
-        if (Auth::check()) {
-            // Jika user login, ambil order berdasarkan user_id
-            $orders = Order::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
-        } else {
-            // Jika user guest, ambil order berdasarkan visitor_id dari session
-            $visitor_id = session('visitor_id');
-            $orders = Order::where('visitor_id', $visitor_id)->orderBy('id', 'desc')->get();
-        }
-
+        $orders = Order::orderBy('id', 'desc')
+            ->select('id', 'receiver', 'address', 'total_price', 'date', 'status', 'detail_status')
+            ->get();
         return view('admin.order.index', compact('orders'));
     }
 
-    public function detail($id)
+    public function store(Request $request)
     {
-        $order = Order::find($id);
+        $request->validate([
+            'receiver' => 'required|string|max:255',
+            'address' => 'required|string|min:10|max:15',
+            'total_price' => 'required|integer',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-        // Pastikan hanya pemilik order yang bisa melihat detailnya
-        if (Auth::check()) {
-            if ($order->user_id != Auth::id()) {
-                abort(403, "Unauthorized Access");
-            }
-        } else {
-            if ($order->visitor_id != session('visitor_id')) {
-                abort(403, "Unauthorized Access");
-            }
-        }
+        $order = new Order();
+        $order->receiver = $request->input('receiver');
+        $order->address = $request->input('address');
+        $order->total_price = $request->input('total_price');
+        $order->status = 'pending';
+        $order->detail_status = 'menunggu konfirmasi pembayaran';
+        $order->date = now();
+        $order->user_id = auth()->id(); // Jika menggunakan autentikasi
+        $order->save();
 
-        $details = Order_Product::where('order_id', $id)->get();
-        $identity = Order_Product::where('order_id', $id)->first();
+        $order->products()->attach($request->product_id, [
+            'quantity' => $request->quantity,
+            'subtotal' => $request->quantity * \App\Models\Product::find($request->product_id)->price
+        ]);
 
-        return view('admin.order.detail', compact('details', 'identity', 'id'));
-    }
-
-    public function cetak()
-    {
-        return view('order.cetak_laporan');
-    }
-
-    public function cetak_pertanggal($tglawal, $tglakhir)
-    {
-        if (Auth::check()) {
-            $orders = Order::whereBetween('date', [$tglawal, $tglakhir])
-                ->where('status', '=', 'dibayar')
-                ->where('user_id', Auth::id())
-                ->get();
-            $sum = Order::whereBetween('date', [$tglawal, $tglakhir])
-                ->where('status', '=', 'dibayar')
-                ->where('user_id', Auth::id())
-                ->sum('total_price');
-        } else {
-            $visitor_id = session('visitor_id');
-            $orders = Order::whereBetween('date', [$tglawal, $tglakhir])
-                ->where('status', '=', 'dibayar')
-                ->where('visitor_id', $visitor_id)
-                ->get();
-            $sum = Order::whereBetween('date', [$tglawal, $tglakhir])
-                ->where('status', '=', 'dibayar')
-                ->where('visitor_id', $visitor_id)
-                ->sum('total_price');
-        }
-
-        return view('order.laporan_tercetak', compact('orders', 'tglawal', 'tglakhir', 'sum'));
+        return redirect()->route('order.success', ['order' => $order->id])
+            ->with('success', 'Pesanan berhasil dibuat!');
     }
 
     public function produkData(Request $request)
     {
-        if (request()->ajax()) {
-            if (!empty($request->from_date)) {
-                $query = DB::table('orders')
-                    ->whereBetween('date', array($request->from_date, $request->to_date));
-            } else {
-                $query = DB::table('orders');
-            }
+        $query = Order::select('id', 'receiver', 'address', 'total_price', 'date', 'status', 'detail_status')
+            ->orderBy('id', 'desc');
 
-            // Filter berdasarkan user login atau visitor_id
-            if (Auth::check()) {
-                $query->where('user_id', Auth::id());
-            } else {
-                $query->where('visitor_id', session('visitor_id'));
-            }
-
-            $data = $query->get();
-
-            return Datatables::of($data)
-                ->addColumn('action', function ($data) {
-                    return '<a href="' . route('admin.order.detail', $data->id) . '" id="btn0" class="btn btn-xs btn-secondary"><i class="fa-solid fa-circle-info"></i></a>';
-                })
-                ->editColumn('status', function ($data) {
-                    switch ($data->status) {
-                        case 'belum bayar':
-                            return '<button type="button" class="btn btn-maroon"><i class="bx bx-no-entry"></i> Belum Bayar</button>';
-                        case 'menunggu verifikasi':
-                            return '<button type="button" class="btn btn-warning"><i class="bx bx-time-five"></i> Menunggu Verifikasi</button>';
-                        case 'dibayar':
-                            return '<button type="button" class="btn btn-success"><i class="bx bx-check-circle"></i> Dibayar</button>';
-                        default:
-                            return '<button type="button" class="btn btn-danger"><i class="bx bx-x-circle"></i> Ditolak</button>';
-                    }
-                })
-                ->editColumn('total_price', function ($data) {
-                    return 'Rp. ' . number_format($data->total_price, 0);
-                })
-                ->rawColumns(['status', 'action', 'total_price'])
-                ->make(true);
+        if ($request->has('from_date') && $request->has('to_date') && $request->from_date && $request->to_date) {
+            $query->byDateRange($request->from_date, $request->to_date);
         }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('address', fn($row) => $row->address)
+            ->addColumn('detail_status', fn($row) => $row->detail_status ?? 'Belum diatur')
+            ->addColumn('action', function ($row) {
+                $updateStatus = '<form action="' . route('admin.order.updateStatus', $row->id) . '" method="POST" style="display:inline;">
+                    ' . csrf_field() . '
+                    <select name="detail_status" onchange="this.form.submit()">
+                        <option value="">Pilih Status</option>';
+                foreach (Order::$deliveryStatuses as $status) {
+                    $selected = $row->detail_status == $status ? 'selected' : '';
+                    $updateStatus .= "<option value='$status' $selected>$status</option>";
+                }
+                $updateStatus .= '</select></form>';
+                return '<div class="btn-group">
+                    <a href="' . route('admin.order.detail', $row->id) . '" class="btn btn-sm btn-primary">Detail</a>
+                    <button class="btn btn-sm btn-danger print-btn" data-id="' . $row->id . '">Cetak</button>
+                    ' . $updateStatus . '
+                </div>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+    public function invoiceDetail($id)
+    {
+        $order = Order::with('products')->findOrFail($id);
+        if ($order->user_id !== auth()->id()) {
+            return redirect()->route('invoice.list')->with('warning', 'Anda tidak memiliki akses ke pesanan ini.');
+        }
+        $details = $order->products;
+        return view('customer.invoice_detail', compact('order', 'details'));
     }
 
-    public function records()
+    public function detail($id)
     {
-        if (Auth::check()) {
-            // Jika user login, ambil riwayat pesanan berdasarkan user_id
-            $orders = Order::where('user_id', Auth::id())->get();
-        } else {
-            // Jika guest, ambil berdasarkan visitor_id dari session
-            $orders = Order::where('visitor_id', session('visitor_id'))->get();
-        }
+        $order = Order::with('products')->findOrFail($id);
+        $details = $order->products;
 
-        return view('order.records', compact('orders'));
+        return view('admin.order.detail', compact('order', 'details'));
     }
 
-    public function laporan_penjualan(Request $request)
+    public function updateStatus(Request $request, $id)
     {
-        $startDate = $request->input('from_date', now()->subDays(30)->toDateString());
-        $endDate = $request->input('to_date', now()->toDateString());
+        $request->validate([
+            'detail_status' => 'required|in:' . implode(',', Order::$deliveryStatuses)
+        ]);
 
-        if ($startDate > $endDate) {
-            return redirect()->back()->withErrors(['date' => 'Tanggal awal tidak boleh lebih besar dari tanggal akhir']);
-        }
+        $order = Order::findOrFail($id);
+        $order->detail_status = $request->detail_status;
+        $order->save();
 
-        $totalSales = Order::byDateRange($startDate, $endDate)
-            ->byStatus('dibayar')
-            ->sum('total_price');
-        $orderCount = Order::byDateRange($startDate, $endDate)
-            ->byStatus('dibayar')
-            ->count();
-        $avgOrderValue = $orderCount ? $totalSales / $orderCount : 0;
-
-        $dailySales = Order::byDateRange($startDate, $endDate)
-            ->byStatus('dibayar')
-            ->selectRaw('DATE(date) as sale_date, SUM(total_price) as total')
-            ->groupBy('sale_date')
-            ->orderBy('sale_date')
-            ->pluck('total', 'sale_date')
-            ->toArray();
-
-        $topProducts = Order_Product::whereHas('order', function ($query) use ($startDate, $endDate) {
-            $query->byDateRange($startDate, $endDate)->byStatus('dibayar');
-        })
-            ->join('products', 'order_product.product_id', '=', 'products.id')
-            ->selectRaw('products.name, SUM(order_product.quantity) as total_quantity, SUM(order_product.subtotal) as total_revenue')
-            ->groupBy('products.name')
-            ->orderByDesc('total_quantity')
-            ->limit(5)
-            ->get();
-
-        $statusDistribution = Order::byDateRange($startDate, $endDate)
-            ->selectRaw('status, COUNT(*) as count')
-            ->groupBy('status')
-            ->pluck('count', 'status')
-            ->toArray();
-
-        $stats = [
-            'total_sales' => $totalSales,
-            'order_count' => $orderCount,
-            'avg_order_value' => $avgOrderValue,
-            'daily_sales' => $dailySales,
-            'top_products' => $topProducts,
-            'status_distribution' => $statusDistribution,
-        ];
-
-        return view('owner.laporan_penjualan', compact('stats', 'startDate', 'endDate'));
+        return redirect()->route('admin.order.index')->with('success', 'Status pengiriman diperbarui!');
     }
 }

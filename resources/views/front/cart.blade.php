@@ -1,209 +1,204 @@
 @extends('layouts.frontend')
-  <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" >
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/f4cf3b69a5.js" crossorigin="anonymous"></script>
-  <link href="{{ asset('/css/cart.css') }}" rel="stylesheet">
-  </head>
-  @section('content')
-  <div class="container-fluid" style="margin-top: 90px;">
-  <div class="menu-web">
-    <div class="card"> 
-      @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-          <p class="text-green-800">{{ $message }}</p>
-        </div>
-      @endif
 
-      <div class="card-head">
-        <h3>Keranjang</h3>
-      </div>
-    
-      <div class="card-body">
-        <p>Informasi Pesanan </p>
-            <table class="table ">
-              <thead>
-                <tr >
-                  <th></th>
-                  <th>Nama</th>
-                  <th>Harga</th>
-                  <th>Jumlah</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($cartItems as $item)
-                <tr>
-                  <td>
-                    <a class="image-active" href="#">
-                      <img class="cartImg"src="{{ $item->attributes->image }}" alt="Thumbnail">
-                    </a>
-                  </td>
-                  <td>
-                    <a href="#" style="text-decoration: none;color: black;">
-                      <p>{{ $item->name }}</p>
-                    </a>
-                  </td>
-                  <td>
-                    <span>
-                      Rp. {{ number_format( $item->price,0) }}
-                    </span>
-                  </td>
-                  <td class="qty">
-                    <form action="{{ route('cart.update') }}" method="POST">
-                      @csrf
-                      <input type="hidden" name="id" value="{{ $item->id}}" >
-                      <div class="quantity">
-                        <input type="number" name="quantity" min="1" max="100" step="1" value="{{ $item->quantity }}">
-                      </div>
-                      <button type="submit" class="btn"><i class="fa-solid fa-rotate"></i></button>
-                    </form>
-                  </td>
-                  <td>
-                    <form action="{{ route('cart.remove') }}" method="POST">
-                    @csrf
-                    <input type="hidden" value="{{ $item->id }}" name="id">
-                    <button class="close">
-                      <span aria-hidden="true"><i class="fa fa-close"></i></span>
-                    </button>
-                    </form>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          <div class="total" style="float: right;">
-            <h5 style="font-size: 20px">Total:</h5>
-            <h5 style="font-weight: 700">Rp. {{ number_format( Cart::getTotal(),0) }}</h5>
-          </div>
-      </div>
+@php
+$user = currentCustomer();
+@endphp
 
-        <div class="action">
-        @auth
-        <form class="btn1" action="{{ route('cart.checkout') }}" method="GET">
-        @csrf
-        <button type="submit" class="btn" style="color: white">Checkout</button>
-        </form>
-        @else
-      <button type="button" id="checkoutBtn" class="btn btn-primary" style="color: white">Checkout</button>
-        @endauth
-          <form class="btn2" action="{{ route('cart.clear') }}" method="POST">
-            @csrf
-            <button id="btn1" class="btn" style="color: white"><i style="font-size: 24px" class="fa-regular fa-trash-can" aria-hidden="true"></i></button>
-          </form>
-      </div>
-      <a href="/" style="text-decoration: none; font-size: 16px; background-color: rgb(54, 64, 255);width: 169px;padding: 8px;color: white;border-radius: 5px;text-align: center;" ><i class="fa-solid fa-arrow-left" style="margin-right: 5px;" aria-hidden="true"></i>Lanjut Belanja</a>
-        
-  {{-- starts v2 --}}
-
-
-  {{-- starts v2 --}}
-      
-
+@section('content')
+<section id="cart" class="menu section">
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Keranjang</h2>
+        <p><span>Informasi</span> <span class="description-title">Keranjang Anda</span></p>
     </div>
-  </div>
-    <div class="menu-mobile" >
-      <h1 style="margin-top: -15px;margin-bottom: 25px;">Keranjang Saya</h1>
-      
-      @foreach ($cartItems as $item)
-      <div class="card2">
-        <div class="left">
-          <img class="cartImg" src="{{ $item->attributes->image }}" alt="Thumbnail">
-        </div>
-        <div class="right">
-          <h3 style="font-weight: 600;font-size: 20px;margin-bottom: 3px;">{{ $item->name }}</h3>
-        <p style="font-size: 16px;font-weight: 400;margin-bottom: 5px;">  Rp. {{ number_format( $item->price,0) }}</p>
-          <form action="{{ route('cart.update') }}" method="POST">
-            @csrf
-            <input type="hidden" name="id" value="{{ $item->id}}" >
-            <div class="quantity">
-              <input type="number" id="qty" name="quantity" min="1" max="100" step="1" value="{{ $item->quantity }}">
+    <div class="container">
+        <!-- Tambahan: Notifikasi Error -->
+        @if ($error = Session::get('error'))
+            <div class="alert alert-danger text-center" data-aos="fade-up">
+                <p>{{ $error }}</p>
             </div>
-            <button type="submit" class="btn"><i class="fa-solid fa-rotate"></i></button>
-          </form>
-        
+        @endif
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success text-center" data-aos="fade-up">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+
+        <!-- Tambahan: Penanganan Keranjang Kosong -->
+        @if($cartItems->isEmpty())
+            <div class="text-center py-5" data-aos="fade-up">
+                <p class="fs-5">Keranjang Anda kosong. Yuk, mulai belanja!</p>
+                <a href="/menu" class="btn-get-started btn-cart-action" style="background-color: #CE1212; color: white; padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: normal; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); border: 2px solid #222;">
+                    <i class="bi bi-cart me-2"></i> Lihat Menu
+                </a>
+            </div>
+        @else
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Gambar</th>
+                        <th>Nama</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($cartItems as $item)
+                        <tr data-aos="fade-up">
+                            <td>
+                                <img src="{{ $item->attributes->image ?? asset('default-image.jpg') }}" class="menu-img img-fluid" alt="{{ $item->name }}" style="max-height: 80px; max-width: 100%; object-fit: cover;">
+                            </td>
+                            <td>{{ $item->name }}</td>
+                            <td>Rp. {{ number_format($item->price, 0) }}</td>
+                            <td>
+                                <form action="{{ route('cart.update') }}" method="POST" class="d-flex align-items-center">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                    <input type="number" name="quantity" oninput="this.value = this.value.replace(/[^0-9]/g, '')" min="1" max="100" step="1" value="{{ $item->quantity }}" data-max-stock="{{ $item->attributes->stock ?? 100 }}" class="cart-quantity" style="width: 60px; margin-right: 10px;">
+                                    <button type="submit" class="btn-get-started btn-sm" style="background-color: #CE1212; color: white;" aria-label="Perbarui jumlah item">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{ route('cart.remove') }}" method="POST" class="cart-remove-form">
+                                    @csrf
+                                    <input type="hidden" value="{{ $item->id }}" name="id">
+                                    <button class="btn-get-started btn-sm" style="background-color: #CE1212; color: white;" aria-label="Hapus {{ $item->name }}" data-item-name="{{ $item->name }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <div class="total text-end mt-4">
+                <h3 class="fw-bold" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 2rem; color: #333;">
+                    Total: <span class="fw-bold cart-total" style="color: #CE1212;">Rp. {{ number_format(Cart::getTotal(), 0) }}</span>
+                </h3>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-4 text-start mb-2 mb-md-0">
+                    <a href="/menu" class="btn-get-started btn-cart-action" style="background-color: #CE1212; color: white; border: 2px solid hsl(0, 0%, 19%); padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: normal; border-radius: 60px; box-shadow: 0 2px 4px rgb(0, 0, 0, 0.2);">
+                        <i class="bi bi-arrow-left me-2"></i> Kembali ke Menu
+                    </a>
+                </div>
+                <div class="col-md-4 text-center mb-2 mb-md-0">
+                    <form action="{{ route('cart.clear') }}" method="POST" class="d-inline cart-clear-form">
+                        @csrf
+                        <button class="btn-get-started btn-cart-action" style="background-color: #CE1212; color: white; padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: nowrap; border-radius: 60px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); border: 2px solid #222;" aria-label="Hapus semua item di keranjang">
+                            <i class="bi bi-trash me-2"></i> Hapus Semua
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-4 text-end">
+                    @if($user)
+                        <form action="{{ route('cart.checkout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn-get-started btn-cart-action" style="background-color: #CE1212; color: white; padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: normal; border-radius: 60px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); border: 2px solid #222;" {{ $cartItems->isEmpty() ? 'disabled' : '' }}>
+                                Pesan
+                            </button>
+                        </form>
+                    @else
+                        <button type="button" id="checkoutBtn" class="btn-get-started btn-cart-action" style="background-color: #CE1212; color: white; padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: normal; border-radius: 60px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); border: 2px solid #222;" {{ $cartItems->isEmpty() ? 'disabled' : '' }}>
+                            Pesan
+                        </button>
+                    @endif
+                </div>
+            </div>
         </div>
-        <form action="{{ route('cart.remove') }}" method="POST">
-          @csrf
-          <input type="hidden" value="{{ $item->id }}" name="id">
-          <button class="close">
-            <span aria-hidden="true"><i class="fa fa-close"></i></span>
-          </button>
-          </form>
-      </div>
-      @endforeach
-      
-      <div class="card3">
-        <h3 class="title" style="font-size: 20px;">Subtotal</h3>
-        <hr>
-        <h4 class="subtitle" id="qty" style="font-size: 18px;">Jumlah Item <span style="float: right">{{ Cart::getTotalQuantity()}}</span></h4>
-        <hr>
-        <h4 class="subtitle" style="font-size: 18px;">Total Harga <span style="float: right">Rp. {{ number_format( Cart::getTotal(),0) }}</span> </h4>
-        <hr>
-      
-      </div>
-      <div class="action" style="margin-top: 30px;padding: 10px;">
-      @auth
-    {{-- Jika sudah login, langsung submit form ke checkout --}}
-    <form class="btn1" action="{{ route('cart.checkout') }}" method="GET">
-        @csrf
-        <button type="submit" class="btn" style="color: white">Checkout</button>
-    </form>
-      @else
-    {{-- Jika belum login, tampilkan tombol untuk trigger modal --}}
-    <button type="button" id="checkoutBtn" class="btn btn-primary" style="color: white">Checkout</button>
-      @endauth
-        <form class="btn2" action="{{ route('cart.clear') }}" method="POST">
-          @csrf
-          <button id="btn1" class="btn" style="color: white"><i style="font-size: 24px" class="fa-regular fa-trash-can" aria-hidden="true"></i></button>
-        </form>
-      </div>
-      <a href="/home" class="back" style="text-decoration: none;font-size: 16px; background-color: rgb(54, 64, 255);width: 169px;padding: 8px;color: white;border-radius: 5px;text-align: center;"><i class="fa-solid fa-arrow-left" style="margin-right: 5px" aria-hidden="true"></i>Lanjut Belanja</a>
-      
-      </div>
-      
-  </div>
-
-  @guest
-<!-- Modal Pilihan Checkout -->
-<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center">
-      <div class="modal-header">
-        <h5 class="modal-title" id="checkoutModalLabel">Lanjutkan Checkout Sebagai</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-block mb-2">Tamu</a>
-        <a href="{{ route('customer.login') }}" class="btn btn-secondary btn-block">Login</a>
-      </div>
+        @endif
     </div>
-  </div>
+</section>
+
+@unless($user)
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">Lanjutkan Pesan Sebagai</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <a href="{{ route('cart.checkout') }}" class="btn-get-started btn-cart-action d-block mb-2" style="background-color: #CE1212; color: white; padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: normal; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); border: 2px solid #222; margin-left: auto; margin-right: auto;">
+                    Tamu
+                </a>
+                <a href="{{ route('login') }}" class="btn-get-started btn-cart-action d-block" style="background-color: #CE1212; color: white; padding: 10px 20px; font-size: 16px; line-height: 1.5; display: inline-flex; align-items: center; justify-content: center; width: 160px; height: 48px; text-align: center; white-space: normal; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); border: 2px solid #222; margin-left: auto; margin-right: auto;">
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-@endguest
 
+<!-- Tambahan: Modal Konfirmasi Hapus -->
+<div class="modal fade" id="confirmRemoveModal" tabindex="-1" aria-labelledby="confirmRemoveModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmRemoveModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p id="confirmRemoveMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" id="confirmRemoveBtn" class="btn btn-danger">Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-  @endsection
-  <script>
-    $("#qty").bind('keyup mouseup', function () {
-      alert("changed");            
-  });
-  </script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-
-@guest
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('#checkoutBtn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        $('#checkoutModal').modal('show');
-      });
-    });
-  });
-</script>
-@endguest
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal Checkout
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+            new bootstrap.Modal(document.getElementById('checkoutModal')).show();
+        });
+    }
 
+    // Tambahan: Konfirmasi Hapus Item
+    const removeButtons = document.querySelectorAll('.cart-remove-form button');
+    const confirmRemoveModal = document.getElementById('confirmRemoveModal');
+    const confirmRemoveMessage = document.getElementById('confirmRemoveMessage');
+    const confirmRemoveBtn = document.getElementById('confirmRemoveBtn');
+    let activeForm = null;
+
+    removeButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            activeForm = this.closest('form');
+            const itemName = this.getAttribute('data-item-name') || 'item ini';
+            confirmRemoveMessage.textContent = `Apakah Anda yakin ingin menghapus ${itemName} dari keranjang?`;
+            new bootstrap.Modal(confirmRemoveModal).show();
+        });
+    });
+
+    if (confirmRemoveBtn) {
+        confirmRemoveBtn.addEventListener('click', function() {
+            if (activeForm) {
+                activeForm.submit();
+            }
+            new bootstrap.Modal(confirmRemoveModal).hide();
+        });
+    }
+
+    // Tambahan: Konfirmasi Hapus Semua
+    const clearForm = document.querySelector('.cart-clear-form');
+    if (clearForm) {
+        clearForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            activeForm = this;
+            confirmRemoveMessage.textContent = 'Apakah Anda yakin ingin menghapus semua item dari keranjang?';
+            new bootstrap.Modal(confirmRemoveModal).show();
+        });
+    }
+});
+</script>
+@endunless
+@endsection

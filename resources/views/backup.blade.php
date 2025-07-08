@@ -142,10 +142,10 @@ public function kategori(Request $request){
 
 
 
-{{-- Akhir Backup Owner Controller --}}
+// Akhir Backup Owner Controller
 
 
-// Backup Laporan Blade
+<!-- Backup Laporan Blade -->
 <div class="container-fluid">
                 <div class="row">   
                 <div class="col-lg-12">

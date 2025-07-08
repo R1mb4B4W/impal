@@ -8,10 +8,8 @@ use App\Models\Order_Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 
-
 class CartController extends Controller
 {
-
     public function cartList()
     {
         $cartItems = \Cart::getContent();
@@ -25,27 +23,24 @@ class CartController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'attributes' => array(
+            'attributes' => [
                 'image' => $request->image,
-            )
+            ]
         ]);
-        session()->flash(
-            'success',
-            'Produk berhasil ditambahkan kedalam keranjang !'
-        );
+
+        session()->flash('success', 'Produk berhasil ditambahkan ke dalam keranjang!');
         return redirect()->route('cart.list');
     }
+
     public function updateCart(Request $request)
     {
-        \Cart::update(
-            $request->id,
-            [
-                'quantity' => [
-                    'relative' => false,
-                    'value' => $request->quantity
-                ],
-            ]
-        );
+        \Cart::update($request->id, [
+            'quantity' => [
+                'relative' => false,
+                'value' => $request->quantity
+            ],
+        ]);
+
         session()->flash('success', 'Produk berhasil diperbarui!');
         return redirect()->route('cart.list');
     }
@@ -53,71 +48,87 @@ class CartController extends Controller
     public function removeCart(Request $request)
     {
         \Cart::remove($request->id);
-        session()->flash('success', 'Produk berhasil dihapus dari keranjang  !');
+        session()->flash('success', 'Produk berhasil dihapus dari keranjang!');
         return redirect()->route('cart.list');
     }
 
     public function clearAllCart()
     {
         \Cart::clear();
-        session()->flash('success', 'Keranjang Berhasil Dikosongkan !');
-
+        session()->flash('success', 'Keranjang berhasil dikosongkan!');
         return redirect()->route('cart.list');
     }
+
     public function checkout(Request $request)
     {
-        \Cart::update(
-            $request->id,
-            [
-                'quantity' => [
-                    'relative' => false,
-                    'value' => $request->quantity
-                ],
-            ]
-        );
+        if (\Cart::getTotalQuantity() < 1) {
+            return redirect()->route('cart.list')->with('warning', 'Keranjang Anda kosong. Silakan tambahkan produk terlebih dahulu.');
+        }
+
         return view('customer.checkout');
+    }
+
+    public function guestLogin(Request $request)
+    {
+        session(['visitor_id' => uniqid()]);
+        return redirect()->route('cart.checkout')->with('success', 'Anda melanjutkan sebagai tamu.');
     }
 
     public function bayar(Request $request)
     {
-        // Cek apakah user login
-        $user_id = Auth::check() ? Auth::id() : null;
-        $visitor_id = session('visitor_id'); // Ambil visitor_id dari session (cookies)
+        // dd($request);
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'address' => 'required|string|max:255',
+            'pickup_time' => 'required|date',
+        ]);
 
-        $receiver = $request->name;
+        $customer = currentCustomer();
+        $user_id = $customer ? $customer->id : null;
+        $visitor_id = $customer ? null : session('visitor_id');
+
+        $receiver = $customer ? $customer->name : $request->name;
         $address = $request->address;
-        $catatan = $request->catatan ?? 'Tidak Ada Catatan'; // Default catatan jika kosong
-        $detail_status = 'belum bayar';
+        $catatan = $request->catatan ?? 'Tidak Ada Catatan';
+        $pickup_time = $request->pickup_time;
         $total_bayar = \Cart::getTotal();
         $keranjang = \Cart::getContent();
 
-        // Simpan order
-        $order = new Order;
+        // Simpan session guest (opsional jika ingin diisi otomatis nanti)
+        if (!$customer) {
+            session([
+                'guest_name' => $receiver,
+                'guest_address' => $address,
+                'pickup_time' => $pickup_time,
+            ]);
+        }
+
+        $order = new Order();
         $order->user_id = $user_id;
         $order->visitor_id = $visitor_id;
         $order->receiver = $receiver;
         $order->address = $address;
         $order->catatan = $catatan;
-        $order->detail_status = 'belum bayar'; // Ini OK
-        $order->status = 'belum bayar'; // Tambahin ini
+        $order->detail_status = 'belum bayar';
+        $order->status = 'belum bayar';
         $order->total_price = $total_bayar;
+        $order->pickup_time = $pickup_time;
         $order->date = Carbon::now();
         $order->save();
 
-        // Simpan produk dalam pesanan
         foreach ($keranjang as $cart) {
-            $order_product = new Order_Product;
-            $order_product->order_id = $order->id;
-            $order_product->product_id = $cart->id;
-            $order_product->quantity = $cart->quantity;
-            $order_product->subtotal = $cart->quantity * $cart->price;
-            $order_product->save();
+            Order_Product::create([
+                'order_id' => $order->id,
+                'product_id' => $cart->id,
+                'quantity' => $cart->quantity,
+                'subtotal' => $cart->quantity * $cart->price,
+            ]);
         }
 
-        // Bersihkan keranjang setelah checkout
         \Cart::clear();
+        session()->forget(['receiver', 'address', 'catatan', 'pickup_time']);
 
-        return redirect()->route('confirm.index', $order->id)
-    ->with('success', 'Pemesanan berhasil, silahkan upload bukti pembayaran');
+        return redirect()->route('pembayaran', ['id' => $order->id])
+            ->with('success', 'Pemesanan berhasil. Silakan lanjut ke pembayaran.');
     }
 }
