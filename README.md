@@ -1,6 +1,5 @@
-# PSI-2425ge-01-dco 
+# Tugas Impal
 
-Please read [RULES.md](RULES.md).
 
 ## General Discription
 Sistem Informasi Deltizen Corner berbasis website adalah solusi digital yang dikembangkan untuk meningkatkan efisiensi pemesanan makanan dan minuman di kafe Deltizen Corner, Sitoluama. Sistem ini dirancang untuk menggantikan proses manual yang rentan terhadap kesalahan, dengan mendukung pemesanan online, pembayaran digital, serta pelaporan transaksi secara real-time.
