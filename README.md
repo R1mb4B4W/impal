@@ -24,8 +24,7 @@ Sistem Informasi Deltizen Corner berbasis website adalah solusi digital yang dik
 - Server: Apache (Client-server model)
 - Text Editor: Visual Studio Code
 - Model Pengembangan: MVC (Model-View-Controller)
-- Pengujian: Katalon
-- Modeler Proses: Draw.io, Bizagi
+- Pengujian: PHP unit
 
 ## Database Design
 Database dirancang berbasis relasional dengan entitas utama:
